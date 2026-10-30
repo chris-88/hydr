@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fbf9f4;
+  --color-powder: #bfe3f0;
+  --color-powder-deep: #8cc9dd;
+  --color-aqua: #7fd1c9;
+  --color-aqua-deep: #3fb3a8;
+  --color-lavender: #d9d0f5;
+  --color-lavender-deep: #a89be0;
+  --color-ink: #2a3140;
+  --color-mute: #6b7280;
+  --color-blush: #f6d7dc;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-xl2: 1.75rem;
+  --shadow-soft: 0 10px 30px -12px rgb(42 49 64 / 0.18);
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+button {
+  font: inherit;
+}
+
+@keyframes wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes rise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgb(127 209 201 / 0.6); }
+  100% { box-shadow: 0 0 0 18px rgb(127 209 201 / 0); }
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(70vh) rotate(540deg); opacity: 0; }
+}
+
+@keyframes toast-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.wave {
+  animation: wave 6s linear infinite;
+}
+.wave-slow {
+  animation: wave 9s linear infinite reverse;
+}
+.animate-pop {
+  animation: pop 220ms ease-out;
+}
+.animate-pulse-ring {
+  animation: pulse-ring 1.2s ease-out 3;
+}
+.animate-toast {
+  animation: toast-in 200ms ease-out;
+}
+.confetti {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  border-radius: 3px;
+  animation: confetti-fall 2.6s ease-in forwards;
+  pointer-events: none;
+}
+
+.safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+}
+.safe-top {
+  padding-top: calc(env(safe-area-inset-top) + 0.75rem);
+}
