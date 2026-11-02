@@ -138,8 +138,12 @@ Not included on purpose: unit switching, themes, timezone picker.
 
 - GitHub Actions builds with `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` and `VITE_VAPID_PUBLIC_KEY` from repository variables and deploys to GitHub Pages on every push to `main`.
 - Vite base path `/`, `public/CNAME` contains `water.chrisquinn.ie`, DNS CNAME points at `chris-88.github.io`.
-- Supabase changes are deployed by hand with the CLI: `supabase db push`, `supabase functions deploy send-hydration-reminders --no-verify-jwt`, `supabase secrets set`, and `supabase/cron.sql` once. See `docs/setup.md`.
-- Auth redirect URL `https://water.chrisquinn.ie/` is configured in the Supabase dashboard.
+- **Backend is self-hosted (since 2026-11-02):** the Supabase stack runs on the quinn machine at `~/code/infra/stacks/hydr/` and is reached at `https://api.chrisquinn.ie/hydr` through a Cloudflare Tunnel. There is no hosted project and no `supabase link`. Secrets live in pass under `infra/hydr/` and `env/hydr/`.
+  - Schema: apply migrations with `psql "$(pass show env/hydr/DATABASE_URL)" -f supabase/migrations/<file>.sql` and record them in `supabase_migrations.schema_migrations`.
+  - Function: copy `supabase/functions/send-hydration-reminders/` to `~/code/infra/stacks/hydr/volumes/functions/` and `docker compose up -d functions` there. Its secrets (`CRON_SECRET`, `VAPID_KEYS`, `VAPID_SUBJECT`, `APP_URL`) are passed by `docker-compose.hydr.yml` from the stack's `.env`, rendered from pass.
+  - Schedule: `supabase/cron.sql` was applied once with the internal URL `http://api-gw:8000/functions/v1/send-hydration-reminders` and the anon key as `apikey`/`Authorization` (the gateway verifies JWTs for functions); the function still checks `x-cron-secret`.
+  - Auth: `SITE_URL` and redirect URLs are set in the stack's `.env.local-overrides`; emails go out through Resend SMTP.
+- `docs/setup.md` describes the original hosted-Supabase procedure and is kept for reference only.
 
 ## 13. Testing
 
