@@ -5,6 +5,7 @@ import { Button, Card, SectionTitle, Sheet, Spinner } from '@/components/ui'
 import WaterGauge from './WaterGauge'
 import EntryList from './EntryList'
 import Celebration from './Celebration'
+import ReminderNudge from '@/features/notifications/ReminderNudge'
 
 export default function TodayScreen() {
   const { settings, loading, todayTotal, addEntry, deleteEntry, tz, today, entries } = useStore()
@@ -55,6 +56,8 @@ export default function TodayScreen() {
       </header>
 
       <Celebration reached={todayTotal >= goal && goal > 0} dayKey={today} />
+
+      <ReminderNudge />
 
       <div className="flex flex-col items-center">
         <WaterGauge percent={pct} />
