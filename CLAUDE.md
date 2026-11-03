@@ -67,9 +67,9 @@ A SQL function `claim_reminder_slot(user_id, slot)` atomically records the curre
 
 ## 6. Authentication
 
-Supabase Auth with magic-link email sign-in. Sessions persist, so Laura signs in once per device.
+Supabase Auth with an emailed six-digit code. Sessions persist, so Laura signs in once per device.
 
-Invite-only is enforced server-side by turning off "Allow new users to sign up" in the Supabase dashboard and inviting Laura from the Users page. No allowlist code.
+Anyone can sign up (Chris, 2026-11-03: no guest list). `DISABLE_SIGNUP=false` on the self-hosted stack and `shouldCreateUser: true` in the sign-in form: the first code request creates the account, verifying the code confirms it. Accounts can also be created by hand with the GoTrue admin API (`POST /auth/v1/admin/users` with the service role key and `email_confirm: true`), which fires the settings-row trigger. Sign-in emails carry a six-digit code (template served from the infra landing container at `/mail/hydr/magic-link.html`) because the app asks for a code; the default GoTrue template only had a link. The mail link paths must include the `/hydr` prefix (`MAILER_URLPATHS_*=/hydr/auth/v1/verify`): GoTrue keeps only the host of `API_EXTERNAL_URL`, and without the prefix the link landed on the API landing page (2026-11-03, Laura's first sign-in).
 
 ## 7. Reminders
 

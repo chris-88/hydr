@@ -17,11 +17,11 @@ export default function SignIn() {
     setError(null)
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/' },
+      options: { shouldCreateUser: true, emailRedirectTo: window.location.origin + '/' },
     })
     setBusy(false)
     if (error) {
-      setError(error.message.includes('Signups not allowed') ? 'That email is not on the guest list.' : error.message)
+      setError(error.message)
       return
     }
     setStage('code')
